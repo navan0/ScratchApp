@@ -10,11 +10,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity  implements ValueEventListener {
+public class MainActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabaseRef;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mPrizeRef;
+    private DatabaseReference mFirstPrizeRef;
+    private DatabaseReference mSecondPrizeRef;
 
     //UI references
 
@@ -24,31 +25,30 @@ public class MainActivity extends AppCompatActivity  implements ValueEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mText = (TextView) findViewById(R.id.textView);
+        mText = findViewById(R.id.textView);
         mDatabase = FirebaseDatabase.getInstance();
-        mDatabaseRef = mDatabase.getReference();
-        mPrizeRef = mDatabaseRef.child("prize");
-
-    }
-
+//        mDatabaseRef = mDatabase.getReference();
+        mPrizeRef = mDatabase.getReference("prize");
+        mFirstPrizeRef = mDatabase.getReference("prize/first_prize");
 
 
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        if (dataSnapshot.getValue(String.class) != null) {
+        mPrizeRef.setValue(new Prizes("car","bike"));
 
-            String key = dataSnapshot.getKey();
-            if (key.equals("prize")) {
-                String Prize = dataSnapshot.getValue(String.class);
-                mText.setText(Prize);
+        //listen the single data
+        mFirstPrizeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mText.setText(""+dataSnapshot.getValue(String.class));
+
             }
 
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
-    }
 }
