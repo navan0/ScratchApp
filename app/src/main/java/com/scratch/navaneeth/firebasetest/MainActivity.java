@@ -2,6 +2,7 @@ package com.scratch.navaneeth.firebasetest;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -27,14 +28,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mText = findViewById(R.id.textView);
         mDatabase = FirebaseDatabase.getInstance();
-//        mDatabaseRef = mDatabase.getReference();
+
+
         mPrizeRef = mDatabase.getReference("prize");
+
+        //Write single value
         mFirstPrizeRef = mDatabase.getReference("prize/first_prize");
-
-
-        mPrizeRef.setValue(new Prizes("car","bike"));
-
-        //listen the single data
+        //Read the single value
         mFirstPrizeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -48,9 +48,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //push n number for models
+        //Write a model with auto generated keys
         mPrizeRef.push().setValue(new Prizes("laptop","mobile"));
+        //Read the models
+        mPrizeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Prizes prizes= dataSnapshot.getValue(Prizes.class);
+                Log.d("MainActivity",prizes.first_prize.toString());
+                Log.d("MainActivity",prizes.second_prize.toString());
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
