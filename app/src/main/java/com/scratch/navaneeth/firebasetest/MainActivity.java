@@ -1,8 +1,7 @@
 package com.scratch.navaneeth.firebasetest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -35,12 +34,10 @@ public class MainActivity extends AppCompatActivity  implements ValueEventListen
 
 
     @Override
-
     public void onDataChange(DataSnapshot dataSnapshot) {
         if (dataSnapshot.getValue(String.class) != null) {
 
             String key = dataSnapshot.getKey();
-
             if (key.equals("prize")) {
                 String Prize = dataSnapshot.getValue(String.class);
                 mText.setText(Prize);
