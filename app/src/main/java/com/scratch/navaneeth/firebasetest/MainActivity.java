@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mText.setText(""+dataSnapshot.getValue(String.class));
-
             }
 
             @Override
@@ -48,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        //push n number for models
+        mPrizeRef.push().setValue(new Prizes("laptop","mobile"));
 
     }
 
