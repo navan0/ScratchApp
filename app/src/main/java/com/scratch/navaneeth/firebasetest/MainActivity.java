@@ -11,6 +11,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
@@ -38,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
         mFirstPrizeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Prizes> prizeList = new ArrayList();
+                prizeList.add(prizes);
+                Random randomGenerator = new Random();
+                int index = randomGenerator.nextInt(catalogue.size());
+                Prizes prizes= dataSnapshot.getValue(Prizes.class);
                 mText.setText(""+dataSnapshot.getValue(String.class));
             }
 
@@ -48,22 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //Write a model with auto generated keys
-        mPrizeRef.push().setValue(new Prizes("laptop","mobile"));
-        //Read the models
-        mPrizeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Prizes prizes= dataSnapshot.getValue(Prizes.class);
-                Log.d("MainActivity",prizes.first_prize.toString());
-                Log.d("MainActivity",prizes.second_prize.toString());
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
 }
