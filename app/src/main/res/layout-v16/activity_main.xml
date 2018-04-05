@@ -16,11 +16,8 @@
         android:layout_marginBottom="119dp"
         android:layout_marginTop="132dp"
         android:background="@android:color/holo_blue_dark"
+        android:fontFamily="@font/navanregul"
         android:gravity="center"
-        android:textSize="15sp"
-        android:fontFamily="@font/nava"
-        android:textStyle="bold"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
