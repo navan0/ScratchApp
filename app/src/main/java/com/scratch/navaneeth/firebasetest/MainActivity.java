@@ -12,6 +12,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
@@ -21,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     //UI references
 
-    private TextView mText;
+    private ScratchTextView mText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,45 +43,13 @@ public class MainActivity extends AppCompatActivity {
         mFirstPrizeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 mText.setText(""+dataSnapshot.getValue(String.class));
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-
-
-        mPrizeRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Prizes prizes= dataSnapshot.getValue(Prizes.class);
-                Log.d("MainActivity",prizes.first_prize.toString());
-                Log.d("MainActivity",prizes.second_prize.toString());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        ScratchTextView scratchTextView = new ScratchTextView(this);
-
-        scratchTextView.setRevealListener(new ScratchTextView.IRevealListener() {
-            @Override
-            public void onRevealed(ScratchTextView tv) {
-                //on reveal
-            }
-
-
-            @Override
-            public void onRevealPercentChangedListener(ScratchTextView stv, float percent) {
-                // on text percent reveal
             }
         });
 
