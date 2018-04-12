@@ -4,32 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_light"
+    android:background="@android:color/darker_gray"
     tools:context="com.scratch.navaneeth.firebasetest.MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
 
     <com.cooltechworks.views.ScratchTextView
         android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
+        android:layout_width="350dp"
+        android:layout_height="80dp"
         android:layout_marginBottom="119dp"
         android:layout_marginTop="132dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="#bdc0c0"
         android:fontFamily="@font/navanregul"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.95" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="146dp"
         android:layout_height="141dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="152dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

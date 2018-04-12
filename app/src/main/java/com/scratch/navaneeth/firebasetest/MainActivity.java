@@ -20,12 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mPrizeRef;
-    private DatabaseReference mFirstPrizeRef;
-    private DatabaseReference mSecondPrizeRef;
+    private List<String> prizeList = new ArrayList<>();
 
     //UI references
 
     private ScratchTextView mText;
+    private String mVal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +37,89 @@ public class MainActivity extends AppCompatActivity {
 
         mPrizeRef = mDatabase.getReference("prize");
 
-        //Write single value
-        mFirstPrizeRef = mDatabase.getReference("prize/first_prize");
+
+//        mPrizeRef.push().child("prize").setValue("Car");
+//        mPrizeRef.push().child("prize").setValue("Bike");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("iPhone");
+//        mPrizeRef.push().child("prize").setValue("Coffee");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+//        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
+        mPrizeRef.push().child("prize").setValue("Laptop");
+        mPrizeRef.push().child("prize").setValue("iPad");
+        mPrizeRef.push().child("prize").setValue("iPhone");
+//        mPrizeRef.push().child("prize").setValue("Coffee");
+//        mPrizeRef.push().child("prize").setValue("Burger");
+//        mPrizeRef.push().child("prize").setValue("Pizza");
+//
+
+
         //Read the single value
-        mFirstPrizeRef.addValueEventListener(new ValueEventListener() {
+        mPrizeRef.child("prize")
+                .equalTo(mVal);
+        mPrizeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                mText.setText(""+dataSnapshot.getValue(String.class));
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Log.d("MainActivity", "Value= " + dataSnapshot1.child("prize").getValue(String.class));
+                    prizeList.add(dataSnapshot1.child("prize").getValue().toString());
+                    String club = dataSnapshot1.getKey().toString();
+//                    mPrizeRef.child(dataSnapshot1.getKey()).removeValue();
+
+                    //club contain the unique key
+                    mPrizeRef.child(club).removeValue();
+//                        mText.setText(club);
+
+
+
+
+                }
+
+
+                if (prizeList.size() > 0) {
+                    Random random = new Random();
+                    mVal = prizeList.get(random.nextInt(prizeList.size())).toString();
+                    mText.setText(prizeList.get(random.nextInt(prizeList.size())).toString());
+
+                }
+
+
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
+
         });
-
-
-
     }
+
 
 }
