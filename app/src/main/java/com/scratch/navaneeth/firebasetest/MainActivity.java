@@ -3,7 +3,6 @@ package com.scratch.navaneeth.firebasetest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.cooltechworks.views.ScratchTextView;
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mPrizeRef;
-    private List<String> prizeList = new ArrayList<>();
+    private List<Prizes> prizeList = new ArrayList<>();
 
     //UI references
 
@@ -79,47 +78,50 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Read the single value
-        mPrizeRef.child("prize")
-                .equalTo(mVal);
         mPrizeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.d("MainActivity", "Value= " + dataSnapshot1.child("prize").getValue(String.class));
-                    prizeList.add(dataSnapshot1.child("prize").getValue().toString());
-                    String club = dataSnapshot1.getKey().toString();
-//                    mPrizeRef.child(dataSnapshot1.getKey()).removeValue();
-
-                    //club contain the unique key
-                    mPrizeRef.child(club).removeValue();
-//                        mText.setText(club);
-
-
-
-
-                }
-
-
-                if (prizeList.size() > 0) {
-                    Random random = new Random();
-                    mVal = prizeList.get(random.nextInt(prizeList.size())).toString();
-                    mText.setText(prizeList.get(random.nextInt(prizeList.size())).toString());
-
+                    Prizes prizes = new Prizes(dataSnapshot1.child("prize").getKey().toString(),dataSnapshot1.child("prize").getValue().toString());
+                    prizeList.add(prizes);
                 }
 
 
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
-
         });
+
+
+        mText.setRevealListener(new ScratchTextView.IRevealListener() {
+            @Override
+            public void onRevealed(ScratchTextView scratchTextView) {
+
+            }
+
+            @Override
+            public void onRevealPercentChangedListener(ScratchTextView scratchTextView, float v) {
+                if (v > 20) {
+                    if (prizeList.size() > 0) {
+                        Random random = new Random();
+                        Prizes prizes = prizeList.get(random.nextInt(prizeList.size()));
+                        mVal = prizes.prize.toString();
+                        mText.setText(prizeList.get(random.nextInt(prizeList.size())).toString());
+                        mPrizeRef.child(prizes.key).removeValue();
+                    }
+                }
+            }
+        });
+
+
+
     }
+
 
 
 }
