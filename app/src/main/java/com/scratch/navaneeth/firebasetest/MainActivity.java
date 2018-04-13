@@ -22,9 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Prizes> prizeList = new ArrayList<>();
 
     //UI references
-
     private ScratchTextView mText;
-    private String mVal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         mPrizeRef = mDatabase.getReference("prize");
-
 
 //        mPrizeRef.push().child("prize").setValue("Car");
 //        mPrizeRef.push().child("prize").setValue("Bike");
@@ -68,13 +65,10 @@ public class MainActivity extends AppCompatActivity {
 //        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
 //        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
 //        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
-        mPrizeRef.push().child("prize").setValue("Laptop");
-        mPrizeRef.push().child("prize").setValue("iPad");
-        mPrizeRef.push().child("prize").setValue("iPhone");
-//        mPrizeRef.push().child("prize").setValue("Coffee");
-//        mPrizeRef.push().child("prize").setValue("Burger");
-//        mPrizeRef.push().child("prize").setValue("Pizza");
-//
+//        mPrizeRef.push().child("prize").setValue("Laptop");
+//        mPrizeRef.push().child("prize").setValue("iPad");
+//        mPrizeRef.push().child("prize").setValue("iPhone");
+
 
 
         //Read the single value
@@ -84,10 +78,27 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.d("MainActivity", "Value= " + dataSnapshot1.child("prize").getValue(String.class));
-                    Prizes prizes = new Prizes(dataSnapshot1.child("prize").getKey().toString(),dataSnapshot1.child("prize").getValue().toString());
+                    Prizes prizes = new Prizes(dataSnapshot1.getKey(),dataSnapshot1.child("prize").getValue().toString());
                     prizeList.add(prizes);
                 }
 
+
+                if (prizeList.size() > 0) {
+                    Random random = new Random();
+                    final Prizes prizes = prizeList.get(random.nextInt(prizeList.size()));
+                    mText.setText(prizes.prize.toString());
+                    mText.setRevealListener(new ScratchTextView.IRevealListener() {
+                        @Override
+                        public void onRevealed(ScratchTextView scratchTextView) {
+                            mPrizeRef.child(prizes.key).removeValue();
+                        }
+
+                        @Override
+                        public void onRevealPercentChangedListener(ScratchTextView scratchTextView, float v) {
+
+                        }
+                    });
+                }
 
             }
 
@@ -98,25 +109,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mText.setRevealListener(new ScratchTextView.IRevealListener() {
-            @Override
-            public void onRevealed(ScratchTextView scratchTextView) {
 
-            }
 
-            @Override
-            public void onRevealPercentChangedListener(ScratchTextView scratchTextView, float v) {
-                if (v > 20) {
-                    if (prizeList.size() > 0) {
-                        Random random = new Random();
-                        Prizes prizes = prizeList.get(random.nextInt(prizeList.size()));
-                        mVal = prizes.prize.toString();
-                        mText.setText(prizeList.get(random.nextInt(prizeList.size())).toString());
-                        mPrizeRef.child(prizes.key).removeValue();
-                    }
-                }
-            }
-        });
 
 
 
