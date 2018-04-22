@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         mPrizeRef = mDatabase.getReference("prize");
-
 //        mPrizeRef.push().child("prize").setValue("Car");
 //        mPrizeRef.push().child("prize").setValue("Bike");
 //        mPrizeRef.push().child("prize").setValue("Better Luck Next Time");
@@ -79,27 +78,26 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Log.d("MainActivity", "Value= " + dataSnapshot1.child("prize").getValue(String.class));
                     Prizes prizes = new Prizes(dataSnapshot1.getKey(),dataSnapshot1.child("prize").getValue().toString());
-                    prizeList.add(prizes);
+                    if (prizeList.size() == 0){
+                        prizeList.add(prizes);
+                    }else{
+                        Random random = new Random();
+                        final Prizes prize = prizeList.get(random.nextInt(prizeList.size()));
+                        mText.setText(prize.prize.toString());
+                        mText.setRevealListener(new ScratchTextView.IRevealListener() {
+                            @Override
+                            public void onRevealed(ScratchTextView scratchTextView) {
+                                mPrizeRef.child(prize.key).removeValue();
+                            }
+
+                            @Override
+                            public void onRevealPercentChangedListener(ScratchTextView scratchTextView, float v) {
+
+                            }
+                        });
+                    }
                 }
-
-
-                if (prizeList.size() > 0) {
-                    Random random = new Random();
-                    final Prizes prizes = prizeList.get(random.nextInt(prizeList.size()));
-                    mText.setText(prizes.prize.toString());
-                    mText.setRevealListener(new ScratchTextView.IRevealListener() {
-                        @Override
-                        public void onRevealed(ScratchTextView scratchTextView) {
-                            mPrizeRef.child(prizes.key).removeValue();
-                        }
-
-                        @Override
-                        public void onRevealPercentChangedListener(ScratchTextView scratchTextView, float v) {
-
-                        }
-                    });
-                }
-
+                Log.d("prizeListSize","= "+prizeList.size());
             }
 
             @Override
@@ -108,7 +106,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("prizeListSize","= "+prizeList.size());
+        if (prizeList.size() > 0) {
 
+        }
 
 
 
