@@ -1,8 +1,14 @@
 package com.scratch.navaneeth.firebasetest;
 
+import android.content.Intent;
+import java.util.Timer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 
 import com.cooltechworks.views.ScratchTextView;
 import com.google.firebase.database.DataSnapshot;
@@ -15,14 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class    MainActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mPrizeRef;
     private List<Prizes> prizeList = new ArrayList<>();
 
+
     //UI references
     private ScratchTextView mText;
+    public Button b2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mText = findViewById(R.id.textView);
         mDatabase = FirebaseDatabase.getInstance();
+        b2=findViewById(R.id.button2);
 
 
         mPrizeRef = mDatabase.getReference("prize");
@@ -88,14 +97,30 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onRevealed(ScratchTextView scratchTextView) {
                                 mPrizeRef.child(prize.key).removeValue();
+
+                                b2.setVisibility(scratchTextView.VISIBLE);
                             }
+
 
                             @Override
                             public void onRevealPercentChangedListener(ScratchTextView scratchTextView, float v) {
 
                             }
+
+                        });
+
+                        b2.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View arg0) {
+
+                                // Start NewActivity.class
+                                Intent myIntent = new Intent(MainActivity.this,
+                                        QRactivity.class);
+                                startActivity(myIntent);
+                            }
                         });
                     }
+
+
                 }
                 Log.d("prizeListSize","= "+prizeList.size());
             }
@@ -106,11 +131,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         Log.d("prizeListSize","= "+prizeList.size());
         if (prizeList.size() > 0) {
 
         }
-
 
 
 
